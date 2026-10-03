@@ -1,0 +1,42 @@
+handover:
+  protocol_version: 1
+  project: FIND_YOUR_WAY_PAYOUT_OUTCOME_ASSURANCE
+  date: 2026-10-02
+  source_of_truth: GITHUB
+  repository: Faadil1/find-your-way-payout-outcomes
+  branch: spike/technical-reality
+
+  resume_rule: >-
+    Read state/CURRENT.yaml first, then this HANDOVER, product/PRD.md, ARCHITECTURE.md,
+    BUILD-PLAN.md, CONDITIONAL-GATEWAY-REGISTRY.yaml, PROJECT-LIFECYCLE-COVERAGE.yaml,
+    and EVIDENCE-GRAPH-SEED.yaml. GitHub state outranks chat memory.
+
+  current_milestone: TECHNICAL_REALITY_PROVEN__BUILD_SCOPE_LOCKED
+  exact_next_gate: CORE_OUTCOME_LOOP_VERTICAL_SLICE
+
+  completed:
+    - technical_spike_live_on_stellar_testnet
+    - strict_receive_exact_amount_proven
+    - op_no_trust_negative_proven
+    - claimable_create_claim_proven
+    - time_bound_reclaim_proven
+    - receipt_bound_to_commit
+    - living_prd_created
+    - architecture_created
+    - build_plan_created
+
+  next_actions:
+    - merge spike/technical-reality through PR after final diff review
+    - create build/core-outcome-loop from promoted main
+    - implement shared outcome model and deterministic capability/policy engine
+    - implement operator surface plus live Stellar Testnet execution
+    - prove hero path from product UI, not CLI
+    - add boundary, recovery-return, and anti-duplicate reconciliation
+    - run post-vertical-slice depth gap review before terminal promotion
+
+  fail_closed_rules:
+    - green_ci_without_receipt_does_not_prove_gate
+    - induced_failure_must_be_labeled
+    - no_cash_or_anchor_claim_without_external_evidence
+    - no_blind_retry_under_ambiguous_state
+    - no_build_candidate_ready_from_vertical_slice_alone

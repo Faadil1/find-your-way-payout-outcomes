@@ -1,0 +1,83 @@
+project: FIND_YOUR_WAY_PAYOUT_OUTCOME_ASSURANCE
+repository: Faadil1/find-your-way-payout-outcomes
+branch: spike/technical-reality
+status: TECHNICAL_REALITY_PROVEN__PRD_ACTIVE
+updated: 2026-10-02
+
+allowed_gate_statuses:
+  - ACTIVE
+  - N_A
+  - BLOCKED
+  - PROVEN
+
+gates:
+  hackathon_general_track:
+    status: PROVEN
+  exact_submission_deadline:
+    status: ACTIVE
+    note: "Platform API evidence captured 2026-10-05T22:00:00Z; authenticated submission UI/T&C confirmation still required."
+  canada_general_track_eligibility:
+    status: ACTIVE
+    note: "Full T&C not yet independently confirmed."
+  pre_build_reality_gate:
+    status: ACTIVE
+    note: "Failure mechanism is real and technically proven; operator willingness-to-pay/user interview evidence remains open."
+  negative_event_gate:
+    status: PROVEN
+    event: "Recipient cannot hold target asset / payment fails op_no_trust; blind retry does not repair readiness."
+  competitive_novelty_kill_gate:
+    status: ACTIVE
+    note: "Generic routing, failover, retry, claimable-balance fallback, and SDP-like bulk payouts are not novel. Build must preserve the uniform outcome contract + capability-aware settlement policy + honest reconciliation."
+  stellar_removal_test:
+    status: PROVEN
+  technical_reality_strict_receive:
+    status: PROVEN
+    evidence: "tx da818d403d546eb02e1440b4a65150f5012d68f1c4c4071bdd56c9c31b462839"
+  technical_reality_no_trust:
+    status: PROVEN
+    evidence: "Observed tx_failed / op_no_trust in run 37086143496."
+  technical_reality_claimable_claim:
+    status: PROVEN
+    evidence: "create 38b394d59e6bb78343c6116f596d1f17538e4da7afe38e45986dc4abd27dc09f; claim f232be33e655e34a16bce50f5e4c6e6ede29b5eb58bd61c9c44cbe37bd8da5c7"
+  technical_reality_time_bound_reclaim:
+    status: PROVEN
+    evidence: "reclaim 3f241b9c88bb3eb5e8b234cc4bc05bec67bf0d3318d0cbcc446599278ee48b76"
+  technical_reality_sac_contract_recipient:
+    status: N_A
+    reactivation_trigger: "Activate only if C-address support materially improves hero workflow after core product slice exists."
+  proof_to_pay:
+    status: N_A
+  moneygram:
+    status: N_A
+  sep31_production:
+    status: N_A
+  x402:
+    status: N_A
+  mpp:
+    status: N_A
+  ai_route_selection:
+    status: N_A
+  truth_boundary_gate:
+    status: PROVEN
+    note: "Receipt separates LIVE_TESTNET, INDUCED_FAILURE, and NOT_IMPLEMENTED."
+  negative_path_gate:
+    status: PROVEN
+    note: "Real op_no_trust negative path observed."
+  evidence_integrity_gate:
+    status: PROVEN
+  evidence_graph_gate:
+    status: PROVEN
+  runtime_commit_binding_gate:
+    status: PROVEN
+    evidence: "Run 37086143496 and artifact digest bound to commit 44ec3e5c264867dabcba7fa437c87484c23c4778."
+  deterministic_demo_gate:
+    status: ACTIVE
+  judge_performance_assurance:
+    status: ACTIVE
+  product_depth_live_reality:
+    status: ACTIVE
+  engineering_quality_assurance:
+    status: ACTIVE
+  build_candidate_ready:
+    status: BLOCKED
+    reason: "Living PRD/build implementation, real user surface, live core-loop integration, representative scenarios, deployment and terminal assurance remain incomplete."

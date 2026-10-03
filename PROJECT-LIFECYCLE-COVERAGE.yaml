@@ -1,0 +1,44 @@
+version: 1
+project: FIND_YOUR_WAY_PAYOUT_OUTCOME_ASSURANCE
+status: ACTIVE
+updated: 2026-10-02
+
+macro_lifecycle:
+  QUALIFY: SATISFIED
+  DECIDE: SATISFIED
+  DESIGN: ACTIVE
+  DELIVER: ACTIVE
+  AUDIT: MISSING
+  EXPAND: MISSING
+
+judged_build_cycle:
+  RUBRIC: SATISFIED
+  PAIN: SATISFIED
+  PROBLEM: SATISFIED
+  NEGATIVE_EVENT: SATISFIED
+  DIFFERENTIATOR: SATISFIED
+  EXECUTION: ACTIVE
+  LIVE_DEPTH: ACTIVE
+  EVIDENCE: ACTIVE
+  STORY: MISSING
+  DEMO: MISSING
+  Q_AND_A: MISSING
+
+product_reality:
+  live_core_loop: ACTIVE
+  load_bearing_integration: PROVEN
+  real_consequence: ACTIVE
+  success_scenario: PROVEN_IN_SPIKE
+  negative_scenario: PROVEN_IN_SPIKE
+  boundary_scenario: ACTIVE
+  recovery_claim: PROVEN_IN_SPIKE
+  recovery_return: PROVEN_IN_SPIKE
+  external_dependency_failure: NOT_APPLICABLE_WITH_REASON
+  real_user_surface: ACTIVE
+  operator_loop: ACTIVE
+  recipient_surface: ACTIVE
+  observability_receipts: ACTIVE
+  judge_self_serve: ACTIVE
+  setup_reproducibility: ACTIVE
+  clean_run: MISSING
+  post_vertical_slice_depth_gap_review: MISSING
