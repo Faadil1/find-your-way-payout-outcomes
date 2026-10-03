@@ -609,7 +609,7 @@ export default function App() {
         result.resultCodes?.operations?.[0] ||
         result.resultCodes?.transaction ||
         "unknown";
-      const proven = !result.ok && code.includes("over_sendmax");
+      const proven = !result.ok && (code.includes("over_source_max") || code.includes("over_sendmax"));
 
       setSafety((current) => ({
         ...current,
@@ -925,7 +925,7 @@ export default function App() {
                   disabled={busy.boundary || safety.boundaryStatus === "PROVEN"}
                 >
                   {busy.boundary ? "Testing bound…" : "Prove sender-cost guard"}
-                  <span>Expected: op_over_sendmax · no settlement</span>
+                  <span>Expected: sender cap rejection · no settlement</span>
                 </button>
                 {safety.boundaryStatus ? (
                   <div className="safety-result">
