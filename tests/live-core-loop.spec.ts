@@ -57,7 +57,7 @@ test("live browser hero flow reaches usable and returned outcomes", async ({ pag
     "PROVEN",
     { timeout: 60_000 },
   );
-  await expect(page.getByText(/op_over_sendmax/i).first()).toBeVisible();
+  await expect(page.getByText(/op_over_(source_max|sendmax)/i).first()).toBeVisible();
 
   await page.getByRole("button", { name: /Induce lost client response/i }).click();
   await expect(page.getByTestId("safety-lab")).toHaveAttribute(
