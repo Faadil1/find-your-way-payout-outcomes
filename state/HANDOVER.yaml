@@ -7,23 +7,36 @@ handover:
   branch: spike/technical-reality
 
   resume_rule: >-
-    Read state/CURRENT.yaml first, then this HANDOVER, then CONDITIONAL-GATEWAY-REGISTRY.yaml,
-    TECHNICAL-SPIKE.md, and EVIDENCE-GRAPH-SEED.yaml. GitHub state outranks chat memory.
+    Read state/CURRENT.yaml first, then this HANDOVER, product/PRD.md, ARCHITECTURE.md,
+    BUILD-PLAN.md, CONDITIONAL-GATEWAY-REGISTRY.yaml, PROJECT-LIFECYCLE-COVERAGE.yaml,
+    and EVIDENCE-GRAPH-SEED.yaml. GitHub state outranks chat memory.
 
-  current_milestone: TECHNICAL_REALITY_SPIKE_ACTIVE
-  exact_next_gate: EXECUTE_AND_INSPECT_STELLAR_TESTNET_RECEIPT
+  current_milestone: TECHNICAL_REALITY_PROVEN__BUILD_SCOPE_LOCKED
+  exact_next_gate: CORE_OUTCOME_LOOP_VERTICAL_SLICE
+
+  completed:
+    - technical_spike_live_on_stellar_testnet
+    - strict_receive_exact_amount_proven
+    - op_no_trust_negative_proven
+    - claimable_create_claim_proven
+    - time_bound_reclaim_proven
+    - receipt_bound_to_commit
+    - living_prd_created
+    - architecture_created
+    - build_plan_created
 
   next_actions:
-    - run GitHub Actions workflow Technical Reality Spike
-    - inspect evidence/technical-spike-receipt.json artifact
-    - bind receipt to exact commit SHA
-    - mark each technical gate PROVEN or BLOCKED from observed runtime
-    - if first four proofs pass, authorize living PRD plus architecture and build plan
-    - decide whether C-address/SAC materially strengthens hero workflow before activating it
+    - merge spike/technical-reality through PR after final diff review
+    - create build/core-outcome-loop from promoted main
+    - implement shared outcome model and deterministic capability/policy engine
+    - implement operator surface plus live Stellar Testnet execution
+    - prove hero path from product UI, not CLI
+    - add boundary, recovery-return, and anti-duplicate reconciliation
+    - run post-vertical-slice depth gap review before terminal promotion
 
   fail_closed_rules:
     - green_ci_without_receipt_does_not_prove_gate
-    - docs_only_does_not_prove_live_behavior
     - induced_failure_must_be_labeled
     - no_cash_or_anchor_claim_without_external_evidence
-    - no_consequential_product_build_before_spike_promotion
+    - no_blind_retry_under_ambiguous_state
+    - no_build_candidate_ready_from_vertical_slice_alone
