@@ -6,9 +6,9 @@ updated: 2026-10-02
 macro_lifecycle:
   QUALIFY: SATISFIED
   DECIDE: SATISFIED
-  DESIGN: ACTIVE
+  DESIGN: SATISFIED
   DELIVER: ACTIVE
-  AUDIT: MISSING
+  AUDIT: ACTIVE
   EXPAND: MISSING
 
 judged_build_cycle:
@@ -17,28 +17,32 @@ judged_build_cycle:
   PROBLEM: SATISFIED
   NEGATIVE_EVENT: SATISFIED
   DIFFERENTIATOR: SATISFIED
-  EXECUTION: ACTIVE
-  LIVE_DEPTH: ACTIVE
+  EXECUTION: SATISFIED
+  LIVE_DEPTH: SATISFIED
   EVIDENCE: ACTIVE
   STORY: MISSING
-  DEMO: MISSING
+  DEMO: ACTIVE
   Q_AND_A: MISSING
 
 product_reality:
-  live_core_loop: ACTIVE
+  live_core_loop: PROVEN_IN_BROWSER_CI
   load_bearing_integration: PROVEN
-  real_consequence: ACTIVE
-  success_scenario: PROVEN_IN_SPIKE
-  negative_scenario: PROVEN_IN_SPIKE
-  boundary_scenario: ACTIVE
-  recovery_claim: PROVEN_IN_SPIKE
-  recovery_return: PROVEN_IN_SPIKE
+  real_consequence: PROVEN
+  success_scenario: PROVEN_IN_BROWSER_CI
+  negative_scenario: PROVEN_IN_BROWSER_CI
+  boundary_scenario: PROVEN_IN_BROWSER_CI
+  recovery_claim: PROVEN_IN_BROWSER_CI
+  recovery_return: PROVEN_IN_BROWSER_CI
+  reconciliation_anti_duplicate: PROVEN_IN_BROWSER_CI
   external_dependency_failure: NOT_APPLICABLE_WITH_REASON
-  real_user_surface: ACTIVE
-  operator_loop: ACTIVE
-  recipient_surface: ACTIVE
-  observability_receipts: ACTIVE
+  real_user_surface: PROVEN_IN_BROWSER_CI
+  operator_loop: PROVEN_IN_BROWSER_CI
+  recipient_surface: PROVEN_IN_BROWSER_CI
+  observability_receipts: PROVEN_IN_BROWSER_CI
   judge_self_serve: ACTIVE
-  setup_reproducibility: ACTIVE
-  clean_run: MISSING
-  post_vertical_slice_depth_gap_review: MISSING
+  setup_reproducibility: PROVEN_IN_CI
+  public_runtime: MISSING
+  hosted_clean_run: MISSING
+  accessibility_assurance: ACTIVE
+  engineering_quality: ACTIVE
+  post_vertical_slice_depth_gap_review: ACTIVE
