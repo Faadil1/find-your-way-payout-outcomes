@@ -1,0 +1,35 @@
+name: Technical Reality Spike
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - spike/technical-reality
+    paths:
+      - "scripts/**"
+      - "package.json"
+      - ".github/workflows/technical-spike.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  stellar-testnet-spike:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Run live Stellar Testnet spike
+        run: npm run spike
+      - name: Upload technical receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: technical-spike-receipt
+          path: evidence/technical-spike-receipt.json
+          if-no-files-found: error
