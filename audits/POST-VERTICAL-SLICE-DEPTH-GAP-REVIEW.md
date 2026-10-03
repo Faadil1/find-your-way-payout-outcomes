@@ -54,3 +54,15 @@ Pass condition:
 - live reconciliation after an intentionally lost client response;
 - duplicate execution visibly blocked while outcome is unknown;
 - browser CI evidence captured and commit-bound.
+
+
+## Phase 2 closure — 2026-10-03
+
+The two material product-depth gaps targeted immediately after the vertical slice are now closed with browser + live Testnet evidence.
+
+- **Sender-cost boundary:** PROVEN. Tight `sendMax` produced `op_over_source_max`; no settlement occurred; the product preserved the exact recipient outcome invariant.
+- **RECONCILING / anti-duplicate:** PROVEN. One real payment was broadcast, the client response was intentionally discarded, retry was blocked, Horizon reconciled the original transaction, and recipient balance increased exactly once.
+
+Evidence: `evidence/BOUNDARY-RECONCILIATION-DEPTH-RECEIPT.md`.
+
+Remaining gaps are runtime/assurance gaps rather than missing core product behavior: public judge deployment, clean hosted run, deployment binding, accessibility/engineering quality, judge story/demo/Q&A, Project Finisher, and submission integrity.
