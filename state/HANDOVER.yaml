@@ -8,37 +8,39 @@ handover:
 
   resume_rule: >-
     Read state/CURRENT.yaml first, then this HANDOVER, product/PRD.md,
-    audits/POST-VERTICAL-SLICE-DEPTH-GAP-REVIEW.md, ARCHITECTURE.md,
-    CONDITIONAL-GATEWAY-REGISTRY.yaml, PROJECT-LIFECYCLE-COVERAGE.yaml,
-    and the evidence receipts. GitHub state outranks chat memory.
+    audits/POST-VERTICAL-SLICE-DEPTH-GAP-REVIEW.md,
+    evidence/BOUNDARY-RECONCILIATION-DEPTH-RECEIPT.md,
+    CONDITIONAL-GATEWAY-REGISTRY.yaml and PROJECT-LIFECYCLE-COVERAGE.yaml.
+    GitHub state outranks chat memory.
 
-  current_milestone: CORE_OUTCOME_LOOP_VERTICAL_SLICE_PROVEN
-  exact_next_gate: NEGATIVE_BOUNDARY_RECONCILIATION_DEPTH
+  current_milestone: LIVE_DEPTH_PROVEN
+  exact_next_gate: PUBLIC_JUDGE_RUNTIME
 
   completed:
-    - technical_spike_live_on_stellar_testnet
-    - living_prd_and_architecture
-    - operator_console
-    - deterministic_settlement_policy
-    - live_capability_preflight
-    - browser_live_strict_receive
-    - browser_live_op_no_trust
-    - browser_live_claimable_claim
-    - browser_live_treasury_reclaim
-    - browser_receipt_export
-    - vertical_slice_browser_evidence_bound
+    - technical_reality_spike
+    - core_outcome_loop_vertical_slice
+    - operator_surface
+    - recipient_claim_surface
+    - receipt_surface
+    - exact_outcome_success
+    - op_no_trust_negative
+    - claimable_claim_recovery
+    - treasury_return_recovery
+    - sender_cost_boundary
+    - reconciling_anti_duplicate
+    - browser_live_depth_receipt
 
   next_actions:
-    - prove sendMax/cost-bound failure from UI
-    - prove RECONCILING state and no duplicate broadcast under induced client-response uncertainty
-    - rerun browser evidence with both safety cases
-    - update evidence graph and gateway registry
-    - only then move to public judge deployment
-    - rerun clean hosted judge path and bind deployment
+    - deploy current branch as public judge runtime after CI-green build
+    - bind deployment identity and URL to exact commit
+    - execute clean hosted judge path against live Stellar Testnet
+    - capture hosted receipt and screenshot
+    - run accessibility and engineering-quality assurance
+    - reconcile Product Depth Gap Review
+    - build story/demo/Q&A and route to Project Finisher
 
   fail_closed_rules:
-    - vertical_slice_is_not_definition_of_done
+    - public_url_does_not_imply_live_product_until_hosted_flow_is_run
     - induced_failure_must_be_labeled
-    - no_cash_or_anchor_claim_without_external_evidence
     - no_blind_retry_under_ambiguous_state
-    - no_build_candidate_ready_without_depth_and_terminal_assurance
+    - no_build_candidate_ready_without_hosted_evidence_and_terminal_assurance
