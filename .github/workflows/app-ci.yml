@@ -1,0 +1,39 @@
+name: App CI
+
+on:
+  push:
+    branches:
+      - build/core-outcome-loop
+    paths:
+      - "src/**"
+      - "index.html"
+      - "package.json"
+      - "tsconfig*.json"
+      - "vite.config.ts"
+      - ".github/workflows/app-ci.yml"
+  pull_request:
+    paths:
+      - "src/**"
+      - "index.html"
+      - "package.json"
+      - "tsconfig*.json"
+      - "vite.config.ts"
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install
+        run: npm install --no-audit --no-fund
+      - name: Unit tests
+        run: npm test
+      - name: Production build
+        run: npm run build
