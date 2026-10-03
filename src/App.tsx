@@ -105,7 +105,7 @@ function RecipientRow({
       : null;
 
   return (
-    <article className="recipient-card">
+    <article className="recipient-card" data-testid={`recipient-${record.id}`} data-outcome={record.outcome || "UNSET"}>
       <div className="recipient-main">
         <div>
           <div className="eyebrow">Recipient</div>
