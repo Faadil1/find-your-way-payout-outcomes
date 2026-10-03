@@ -13,14 +13,35 @@ import {
   createDemoEnvironment,
   createTimeBoundClaimableBalance,
   event,
+  executeDirectPaymentWithLostResponse,
   executeStrictReceive,
   makeReadyAndClaim,
   preflightRecipient,
   reclaim,
+  reconcileTransaction,
   type DemoEnvironment,
 } from "./stellar";
 
-type BusyKey = "setup" | "naive" | "assured" | "claim" | "return" | "reclaim";
+type BusyKey =
+  | "setup"
+  | "naive"
+  | "assured"
+  | "claim"
+  | "return"
+  | "reclaim"
+  | "boundary"
+  | "unknown"
+  | "reconcile";
+
+interface SafetyState {
+  boundaryStatus?: "PROVEN" | "FAILED";
+  boundaryCode?: string;
+  boundaryTxHash?: string;
+  reconciliationOutcome?: OutcomeState;
+  reconciliationTxHash?: string;
+  reconciliationBefore?: string | null;
+  reconciliationAfter?: string | null;
+}
 
 const allowedGuarantees: PayoutIntent["allowedSettlementGuarantees"] = [
   "STRICT_RECEIVE",
@@ -162,6 +183,7 @@ export default function App() {
   const [preflights, setPreflights] = useState<Record<string, PreflightResult>>({});
   const [records, setRecords] = useState<Record<string, PayoutRecord>>({});
   const [events, setEvents] = useState<EvidenceEvent[]>([]);
+  const [safety, setSafety] = useState<SafetyState>({});
   const [busy, setBusy] = useState<Partial<Record<BusyKey, boolean>>>({});
   const [error, setError] = useState<string | null>(null);
   const [now, setNow] = useState(Date.now());
@@ -571,6 +593,132 @@ export default function App() {
     }
   }
 
+  async function proveCostBoundary() {
+    if (!env) return;
+    setBusyKey("boundary", true);
+    setError(null);
+    try {
+      const result = await executeStrictReceive(
+        env.treasury,
+        env.ready.publicKey(),
+        env.asset,
+        "5",
+        "1",
+      );
+      const code =
+        result.resultCodes?.operations?.[0] ||
+        result.resultCodes?.transaction ||
+        "unknown";
+      const proven = !result.ok && code.includes("over_sendmax");
+
+      setSafety((current) => ({
+        ...current,
+        boundaryStatus: proven ? "PROVEN" : "FAILED",
+        boundaryCode: code,
+        boundaryTxHash: result.txHash,
+      }));
+
+      appendGlobal(
+        event(
+          "INDUCED_FAILURE",
+          proven ? "Sender-cost boundary enforced" : "Unexpected boundary result",
+          proven
+            ? "The requested exact outcome could not fit inside sendMax. Stellar rejected the payment and the product did not degrade the recipient amount."
+            : "The expected over-sendMax result was not observed. This boundary is not promoted as proven.",
+          {
+            txHash: result.txHash,
+            resultCode: code,
+            outcome: proven ? "FAILED_NO_FUNDS_MOVED" : "NEEDS_HUMAN",
+          },
+        ),
+      );
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : String(cause));
+    } finally {
+      setBusyKey("boundary", false);
+    }
+  }
+
+  async function induceUnknownResponse() {
+    if (!env || safety.reconciliationOutcome === "RECONCILING") return;
+    setBusyKey("unknown", true);
+    setError(null);
+    try {
+      const before = await assetBalance(env.marketMaker.publicKey(), env.asset);
+      const lost = await executeDirectPaymentWithLostResponse(
+        env.treasury,
+        env.marketMaker.publicKey(),
+        env.asset,
+        "1",
+      );
+
+      setSafety((current) => ({
+        ...current,
+        reconciliationOutcome: "RECONCILING",
+        reconciliationTxHash: lost.txHash,
+        reconciliationBefore: before,
+        reconciliationAfter: null,
+      }));
+
+      appendGlobal(
+        event(
+          "INDUCED_FAILURE",
+          "Client response intentionally discarded",
+          "One real Testnet payment was broadcast. The success response is intentionally hidden from the product state, so retry is blocked until the ledger is reconciled.",
+          {
+            txHash: lost.txHash,
+            outcome: "RECONCILING",
+          },
+        ),
+      );
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : String(cause));
+    } finally {
+      setBusyKey("unknown", false);
+    }
+  }
+
+  async function reconcileUnknownResponse() {
+    if (!env || !safety.reconciliationTxHash) return;
+    setBusyKey("reconcile", true);
+    setError(null);
+    try {
+      const result = await reconcileTransaction(safety.reconciliationTxHash);
+      const after = await assetBalance(env.marketMaker.publicKey(), env.asset);
+      const delta =
+        safety.reconciliationBefore != null && after != null
+          ? Number(after) - Number(safety.reconciliationBefore)
+          : Number.NaN;
+      const proven = result.found && result.successful && delta === 1;
+
+      setSafety((current) => ({
+        ...current,
+        reconciliationOutcome: proven ? "USABLE" : "NEEDS_HUMAN",
+        reconciliationAfter: after,
+      }));
+
+      appendGlobal(
+        event(
+          "LIVE_TESTNET",
+          proven
+            ? "Ledger reconciliation prevented duplicate payment"
+            : "Reconciliation requires human review",
+          proven
+            ? "Horizon confirmed the original transaction and the recipient balance increased exactly once. No second payment was broadcast."
+            : "The product could not prove the intended single settlement, so it refuses to infer success or retry blindly.",
+          {
+            txHash: safety.reconciliationTxHash,
+            outcome: proven ? "USABLE" : "NEEDS_HUMAN",
+          },
+        ),
+      );
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : String(cause));
+    } finally {
+      setBusyKey("reconcile", false);
+    }
+  }
+
   function downloadReceipt() {
     const publicRecords = Object.values(records).map((record) => ({
       ...record,
@@ -588,6 +736,7 @@ export default function App() {
           "Fiat cash-out, MoneyGram, production anchors, x402/MPP, AI routing, C-address/SAC.",
       },
       records: publicRecords,
+      safety,
       events,
     };
     const blob = new Blob([JSON.stringify(receipt, null, 2)], {
@@ -742,6 +891,107 @@ export default function App() {
               {Object.values(records).map((record) => (
                 <RecipientRow key={record.id} record={record} now={now} />
               ))}
+            </div>
+          </section>
+
+          <section
+            className="safety-section"
+            aria-labelledby="safety"
+            data-testid="safety-lab"
+            data-boundary={safety.boundaryStatus || "UNSET"}
+            data-reconciliation={safety.reconciliationOutcome || "UNSET"}
+          >
+            <div className="section-heading">
+              <div>
+                <div className="eyebrow">Safety depth</div>
+                <h2 id="safety">Know when not to send.</h2>
+              </div>
+              <p className="section-note">
+                Cost bounds fail closed. Unknown submission state blocks duplicate execution.
+              </p>
+            </div>
+
+            <div className="safety-grid">
+              <article className="safety-card">
+                <div className="eyebrow">Boundary · live Testnet</div>
+                <h3>Protect the exact outcome with a sender cap.</h3>
+                <p>
+                  Request 5 POAUSD while allowing only 1 XLM of sender cost. The correct
+                  behavior is a hard stop — never a smaller recipient outcome.
+                </p>
+                <button
+                  className="secondary"
+                  onClick={proveCostBoundary}
+                  disabled={busy.boundary || safety.boundaryStatus === "PROVEN"}
+                >
+                  {busy.boundary ? "Testing bound…" : "Prove sender-cost guard"}
+                  <span>Expected: op_over_sendmax · no settlement</span>
+                </button>
+                {safety.boundaryStatus ? (
+                  <div className="safety-result">
+                    <strong>{safety.boundaryStatus}</strong>
+                    <code>{safety.boundaryCode}</code>
+                    <EvidenceLink hash={safety.boundaryTxHash} />
+                  </div>
+                ) : null}
+              </article>
+
+              <article className="safety-card">
+                <div className="eyebrow">Reconciliation · induced response loss</div>
+                <h3>Never pay twice because a client timed out.</h3>
+                <p>
+                  Broadcast one real payment, intentionally discard the success response,
+                  then reconcile by transaction hash before any retry is permitted.
+                </p>
+                <div className="stack-actions">
+                  <button
+                    className="secondary"
+                    onClick={induceUnknownResponse}
+                    disabled={
+                      busy.unknown ||
+                      safety.reconciliationOutcome === "RECONCILING" ||
+                      safety.reconciliationOutcome === "USABLE"
+                    }
+                  >
+                    {busy.unknown ? "Broadcasting…" : "Induce lost client response"}
+                    <span>Real transaction · hidden response</span>
+                  </button>
+                  <button
+                    className="ghost"
+                    disabled={safety.reconciliationOutcome === "RECONCILING"}
+                  >
+                    Retry payment
+                    <span>
+                      {safety.reconciliationOutcome === "RECONCILING"
+                        ? "BLOCKED — reconcile first"
+                        : "Not needed"}
+                    </span>
+                  </button>
+                  <button
+                    className="primary"
+                    onClick={reconcileUnknownResponse}
+                    disabled={
+                      busy.reconcile ||
+                      safety.reconciliationOutcome !== "RECONCILING" ||
+                      !safety.reconciliationTxHash
+                    }
+                  >
+                    {busy.reconcile ? "Reconciling…" : "Reconcile before retry"}
+                    <span>Query ledger by original transaction hash</span>
+                  </button>
+                </div>
+                {safety.reconciliationOutcome ? (
+                  <div className="safety-result">
+                    <strong>{safety.reconciliationOutcome}</strong>
+                    <span>
+                      {safety.reconciliationOutcome === "RECONCILING"
+                        ? "Duplicate execution is blocked."
+                        : "Original transfer reconciled without a second broadcast."}
+                    </span>
+                    <EvidenceLink hash={safety.reconciliationTxHash} />
+                  </div>
+                ) : null}
+              </article>
             </div>
           </section>
 
