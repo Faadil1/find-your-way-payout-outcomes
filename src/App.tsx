@@ -220,17 +220,17 @@ export default function App() {
       const readyIntent = makeIntent(
         "p-ready",
         environment.ready.publicKey(),
-        environment.asset.issuer,
+        environment.asset.issuer!,
       );
       const unreadyIntent = makeIntent(
         "p-unready",
         environment.unready.publicKey(),
-        environment.asset.issuer,
+        environment.asset.issuer!,
       );
       const returnIntent = makeIntent(
         "p-return",
         environment.returnOnly.publicKey(),
-        environment.asset.issuer,
+        environment.asset.issuer!,
         "7",
         "9",
       );
@@ -396,7 +396,7 @@ export default function App() {
       const intent = makeIntent(
         "p-unready",
         env.unready.publicKey(),
-        env.asset.issuer,
+        env.asset.issuer!,
       );
       const decision = chooseSettlementPolicy(intent, latestUnready);
 
