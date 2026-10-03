@@ -171,6 +171,7 @@ code {
 
 .control-panel,
 .recipients,
+.safety-section,
 .evidence-section {
   padding: 44px 0;
   border-bottom: 1px solid var(--line);
@@ -521,5 +522,75 @@ footer {
     scroll-behavior: auto !important;
     transition: none !important;
     animation: none !important;
+  }
+}
+
+
+.safety-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.safety-card {
+  background: rgba(250, 248, 242, 0.92);
+  border: 1px solid var(--line);
+  padding: 22px;
+}
+
+.safety-card h3 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(24px, 3vw, 36px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-weight: 500;
+  max-width: 520px;
+}
+
+.safety-card > p {
+  color: var(--muted);
+  line-height: 1.5;
+  max-width: 620px;
+  min-height: 68px;
+}
+
+.safety-card > button,
+.stack-actions button {
+  width: 100%;
+}
+
+.stack-actions {
+  display: grid;
+  grid-template-columns: 1fr 0.72fr 1fr;
+  gap: 8px;
+}
+
+.safety-result {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+  font-size: 12px;
+}
+
+.safety-result strong {
+  color: var(--safe);
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 850px) {
+  .safety-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stack-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .safety-card > p {
+    min-height: 0;
   }
 }
