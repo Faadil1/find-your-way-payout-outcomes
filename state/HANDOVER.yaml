@@ -1,0 +1,29 @@
+handover:
+  protocol_version: 1
+  project: FIND_YOUR_WAY_PAYOUT_OUTCOME_ASSURANCE
+  date: 2026-10-02
+  source_of_truth: GITHUB
+  repository: Faadil1/find-your-way-payout-outcomes
+  branch: spike/technical-reality
+
+  resume_rule: >-
+    Read state/CURRENT.yaml first, then this HANDOVER, then CONDITIONAL-GATEWAY-REGISTRY.yaml,
+    TECHNICAL-SPIKE.md, and EVIDENCE-GRAPH-SEED.yaml. GitHub state outranks chat memory.
+
+  current_milestone: TECHNICAL_REALITY_SPIKE_ACTIVE
+  exact_next_gate: EXECUTE_AND_INSPECT_STELLAR_TESTNET_RECEIPT
+
+  next_actions:
+    - run GitHub Actions workflow Technical Reality Spike
+    - inspect evidence/technical-spike-receipt.json artifact
+    - bind receipt to exact commit SHA
+    - mark each technical gate PROVEN or BLOCKED from observed runtime
+    - if first four proofs pass, authorize living PRD plus architecture and build plan
+    - decide whether C-address/SAC materially strengthens hero workflow before activating it
+
+  fail_closed_rules:
+    - green_ci_without_receipt_does_not_prove_gate
+    - docs_only_does_not_prove_live_behavior
+    - induced_failure_must_be_labeled
+    - no_cash_or_anchor_claim_without_external_evidence
+    - no_consequential_product_build_before_spike_promotion
