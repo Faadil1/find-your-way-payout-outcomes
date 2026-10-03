@@ -1,0 +1,77 @@
+project: FIND_YOUR_WAY_PAYOUT_OUTCOME_ASSURANCE
+repository: Faadil1/find-your-way-payout-outcomes
+branch: spike/technical-reality
+status: PRE_BUILD_TECHNICAL_REALITY_SPIKE
+updated: 2026-10-02
+
+allowed_gate_statuses:
+  - ACTIVE
+  - N_A
+  - BLOCKED
+  - PROVEN
+
+gates:
+  hackathon_general_track:
+    status: PROVEN
+  exact_submission_deadline:
+    status: ACTIVE
+    note: "Platform API evidence captured 2026-10-05T22:00:00Z; authenticated submission UI/T&C confirmation still required."
+  canada_general_track_eligibility:
+    status: ACTIVE
+    note: "Full T&C not yet independently confirmed."
+  pre_build_reality_gate:
+    status: ACTIVE
+    note: "Payer-side recipient-readiness and payout exception failures are documented enough to authorize the falsification spike; willingness-to-pay/user evidence remains open."
+  negative_event_gate:
+    status: PROVEN
+    event: "Recipient cannot hold target asset / payment fails op_no_trust; blind retry does not repair readiness."
+  competitive_novelty_kill_gate:
+    status: ACTIVE
+    note: "Generic routing, failover, retry, claimable-balance fallback, and SDP-like bulk payouts are not novel. Novelty must survive as the uniform outcome contract + capability-aware settlement policy + honest reconciliation."
+  stellar_removal_test:
+    status: PROVEN
+  technical_reality_strict_receive:
+    status: ACTIVE
+  technical_reality_no_trust:
+    status: ACTIVE
+  technical_reality_claimable_claim:
+    status: ACTIVE
+  technical_reality_time_bound_reclaim:
+    status: ACTIVE
+  technical_reality_sac_contract_recipient:
+    status: N_A
+    reactivation_trigger: "First four technical proofs pass and C-address support materially improves hero workflow within deadline."
+  proof_to_pay:
+    status: N_A
+  moneygram:
+    status: N_A
+  sep31_production:
+    status: N_A
+  x402:
+    status: N_A
+  mpp:
+    status: N_A
+  ai_route_selection:
+    status: N_A
+  truth_boundary_gate:
+    status: ACTIVE
+  negative_path_gate:
+    status: ACTIVE
+  evidence_integrity_gate:
+    status: ACTIVE
+  evidence_graph_gate:
+    status: ACTIVE
+  runtime_commit_binding_gate:
+    status: ACTIVE
+    note: "Canonical repository now exists; bind live receipt to exact spike commit after CI."
+  deterministic_demo_gate:
+    status: ACTIVE
+  judge_performance_assurance:
+    status: ACTIVE
+  product_depth_live_reality:
+    status: ACTIVE
+  engineering_quality_assurance:
+    status: ACTIVE
+  build_candidate_ready:
+    status: BLOCKED
+    reason: "Technical Reality Spike not yet proven live; living PRD and consequential product build remain unauthorized."
