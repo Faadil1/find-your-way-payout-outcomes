@@ -85,7 +85,7 @@ export async function submit(
   for (const operation of operations) tx.addOperation(operation);
 
   const built = tx.setTimeout(180).build();
-  const txHash = Buffer.from(built.hash()).toString("hex");
+  const txHash = Array.from(built.hash()).map((byte) => byte.toString(16).padStart(2, "0")).join("");
   built.sign(source);
 
   try {
