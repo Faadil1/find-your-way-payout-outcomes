@@ -4,13 +4,13 @@ repository: Faadil1/find-your-way-payout-outcomes
 claims:
   - claim_id: C1_EXACT_OUTCOME
     statement: "For a ready recipient, the system can deliver an exact destination amount through Stellar Strict Receive within a sender cost bound."
-    evidence_class: LIVE_TESTNET_REQUIRED
-    truth_state: NOT_PROVEN
+    evidence_class: LIVE_TESTNET
+    truth_state: PROVEN
     scenarios: [S1_SUCCESS]
   - claim_id: C2_SAFE_UNREADY_RECIPIENT
     statement: "When a recipient cannot hold the target asset, the system can avoid blind retry and switch to a claimable balance that is later claimed or returned."
-    evidence_class: LIVE_TESTNET_REQUIRED
-    truth_state: NOT_PROVEN
+    evidence_class: LIVE_TESTNET
+    truth_state: PROVEN
     scenarios: [S2_NEGATIVE_NO_TRUST, S3_RECOVERY_CLAIM, S4_RECOVERY_RETURN]
 scenarios:
   - scenario_id: S1_SUCCESS
@@ -30,12 +30,30 @@ scenarios:
     preconditions: "Recipient does not claim before cutoff; treasury is claimant after cutoff."
     expected_consequence: "Treasury reclaims; outcome transitions CLAIMABLE → RETURNED."
 runtime_execution:
-  status: MISSING
+  status: OBSERVED
+  runtime: GITHUB_ACTIONS_STELLAR_TESTNET
+  run_id: 37086143496
+  observed_at: "2026-10-03T01:27:22.728Z/2026-10-03T01:29:47.337Z"
+  result: PROVEN_WITH_SAC_DEFERRED
+dependency:
+  - dependency_id: STELLAR_TESTNET
+    role: "Live ledger execution and result codes"
+    live_or_stub: LIVE_TESTNET
+    load_bearing: true
+  - dependency_id: SELF_SEEDED_ORDERBOOK
+    role: "Deterministic Strict Receive test liquidity"
+    live_or_stub: LIVE_TESTNET_INDUCED
+    load_bearing: true
 receipt_or_telemetry:
-  expected: evidence/technical-spike-receipt.json
+  status: OBSERVED
+  artifact_pointer: "GitHub Actions run 37086143496 / artifact 11260662802"
+  artifact_digest: "sha256:81a423100f1a33c9fb9c8020412f584108c4ab60c0343bbe3de8309e789fd6df"
+  canonical_summary: evidence/TECHNICAL-REALITY-RECEIPT.md
+  observed_or_generated: GENERATED_FROM_LIVE_RUNTIME
 commit:
-  status: PENDING_RUNTIME_BINDING
+  status: BOUND
   repository: Faadil1/find-your-way-payout-outcomes
+  commit_sha: 44ec3e5c264867dabcba7fa437c87484c23c4778
   branch: spike/technical-reality
 deployment:
   status: NOT_APPLICABLE_WITH_REASON
