@@ -1,11 +1,6 @@
 name: Live UI Proof
 
 on:
-  push:
-    branches:
-      - build/core-outcome-loop
-    paths:
-      - ".github/workflows/live-ui-proof.yml"
   workflow_dispatch:
 
 concurrency:
