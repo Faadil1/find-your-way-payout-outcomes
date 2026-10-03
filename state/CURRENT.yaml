@@ -4,12 +4,12 @@ canonical_project_state:
   date: 2026-10-02
   source_of_truth: GITHUB
   repository: Faadil1/find-your-way-payout-outcomes
-  branch: spike/technical-reality
+  branch: build/core-outcome-loop
 
   lifecycle:
     macro: DELIVER
-    judged_build_stage: EXECUTION
-    status: TECHNICAL_REALITY_PROVEN__LIVING_PRD_ACTIVE
+    judged_build_stage: LIVE_DEPTH
+    status: CORE_OUTCOME_LOOP_VERTICAL_SLICE_PROVEN__DEPTH_EXPANSION_ACTIVE
 
   concept:
     original_consumer_route_to_cash: PIVOTED
@@ -23,17 +23,26 @@ canonical_project_state:
     github_actions_run: 37086143496
     bound_commit: 44ec3e5c264867dabcba7fa437c87484c23c4778
     evidence: evidence/TECHNICAL-REALITY-RECEIPT.md
+
+  vertical_slice:
+    status: PROVEN
+    browser_run: 37088125083
+    bound_commit: e27b1e0d5176ee8c6701d6ab7a4671eeaf189415
+    artifact_id: 11260798986
+    artifact_digest: sha256:86b055c1fa64f3d03d54808e6602539347497e70bf221e2061ca586d976df1aa
+    evidence: evidence/LIVE-UI-CORE-LOOP-RECEIPT.md
     proven:
-      - STRICT_RECEIVE_EXACT_AMOUNT
-      - OP_NO_TRUST_REAL_NEGATIVE
-      - CLAIMABLE_CREATE_AND_CLAIM
-      - TIME_BOUND_TREASURY_RECLAIM
-    deferred:
-      - C_ADDRESS_SAC_TRANSFER
+      - OPERATOR_SURFACE
+      - LIVE_CAPABILITY_PREFLIGHT
+      - STRICT_RECEIVE_USABLE
+      - REAL_OP_NO_TRUST_NEGATIVE
+      - CLAIMABLE_TO_USABLE
+      - CLAIMABLE_TO_RETURNED
+      - RECEIPT_EXPORT
 
   authority:
     consequential_product_build: AUTHORIZED_ON_FEATURE_BRANCH
-    deployment: NOT_AUTHORIZED_UNTIL_LOCAL_CI_AND_LIVE_URL_NEED
+    deployment: AUTHORIZED_AFTER_DEPTH_CI_FOR_PUBLIC_JUDGE_EVIDENCE
     submission: HUMAN_PROTECTED
 
   product_source:
@@ -41,14 +50,25 @@ canonical_project_state:
     architecture: ARCHITECTURE.md
     build_plan: BUILD-PLAN.md
     lifecycle_coverage: PROJECT-LIFECYCLE-COVERAGE.yaml
+    depth_gap_review: audits/POST-VERTICAL-SLICE-DEPTH-GAP-REVIEW.md
 
-  exact_next_gate: CORE_OUTCOME_LOOP_VERTICAL_SLICE
+  exact_next_gate: NEGATIVE_BOUNDARY_RECONCILIATION_DEPTH
+
+  depth_gaps:
+    - LIVE_SENDMAX_BOUNDARY
+    - LIVE_RECONCILING_ANTI_DUPLICATE
+    - PUBLIC_JUDGE_RUNTIME
+    - CLEAN_PUBLIC_HOST_RUN
+    - DEPLOYMENT_BINDING
+    - ENGINEERING_QUALITY_ASSURANCE
+    - TERMINAL_ASSURANCE
 
   truth_boundary:
     live_allowed:
       - STELLAR_TESTNET
       - HORIZON_RECEIPTS
       - REAL_RESULT_CODES
+      - BROWSER_PRODUCT_FLOW
     induced_must_be_labeled:
       - SELF_SEEDED_LIQUIDITY
       - DELIBERATE_MISSING_TRUSTLINE
@@ -64,4 +84,4 @@ canonical_project_state:
       - C_ADDRESS_SAC_TRANSFER
 
   build_candidate_ready: BLOCKED
-  block_reason: "Product UI/live core loop, representative boundary/recovery scenarios, deployment binding, depth review and terminal assurance remain incomplete."
+  block_reason: "Vertical slice is proven but material boundary/reconciliation depth, public runtime evidence, audit and terminal assurance remain incomplete."
