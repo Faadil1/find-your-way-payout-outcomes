@@ -1,16 +1,11 @@
 name: Live UI Proof
 
 on:
-  push:
-    branches:
-      - build/core-outcome-loop
-    paths:
-      - "src/**"
-      - "tests/**"
-      - "package.json"
-      - "playwright.config.ts"
-      - ".github/workflows/live-ui-proof.yml"
   workflow_dispatch:
+
+concurrency:
+  group: live-ui-proof
+  cancel-in-progress: false
 
 permissions:
   contents: read
