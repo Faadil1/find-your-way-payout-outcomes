@@ -8,8 +8,8 @@ canonical_project_state:
 
   lifecycle:
     macro: DELIVER
-    judged_build_stage: LIVE_DEPTH
-    status: CORE_OUTCOME_LOOP_VERTICAL_SLICE_PROVEN__DEPTH_EXPANSION_ACTIVE
+    judged_build_stage: EVIDENCE
+    status: LIVE_DEPTH_PROVEN__PUBLIC_JUDGE_RUNTIME_NEXT
 
   concept:
     original_consumer_route_to_cash: PIVOTED
@@ -21,47 +21,48 @@ canonical_project_state:
   technical_reality:
     status: PROVEN_WITH_SAC_DEFERRED
     github_actions_run: 37086143496
-    bound_commit: 44ec3e5c264867dabcba7fa437c87484c23c4778
     evidence: evidence/TECHNICAL-REALITY-RECEIPT.md
 
   vertical_slice:
     status: PROVEN
     browser_run: 37088125083
-    bound_commit: e27b1e0d5176ee8c6701d6ab7a4671eeaf189415
-    artifact_id: 11260798986
-    artifact_digest: sha256:86b055c1fa64f3d03d54808e6602539347497e70bf221e2061ca586d976df1aa
     evidence: evidence/LIVE-UI-CORE-LOOP-RECEIPT.md
+
+  depth:
+    status: NEGATIVE_BOUNDARY_RECONCILIATION_DEPTH_PROVEN
+    browser_run: 37089058200
+    bound_commit: f4f83969f96eb114242ab482c32d5ddc4a175119
+    artifact_id: 11262205391
+    artifact_digest: sha256:11a1dfeede6f55a139a53304cd5e157cf66f6400c63edea28331eb5f7df14ef4
+    evidence: evidence/BOUNDARY-RECONCILIATION-DEPTH-RECEIPT.md
     proven:
-      - OPERATOR_SURFACE
-      - LIVE_CAPABILITY_PREFLIGHT
-      - STRICT_RECEIVE_USABLE
-      - REAL_OP_NO_TRUST_NEGATIVE
-      - CLAIMABLE_TO_USABLE
-      - CLAIMABLE_TO_RETURNED
-      - RECEIPT_EXPORT
+      - SUCCESS_EXACT_OUTCOME
+      - NEGATIVE_OP_NO_TRUST
+      - RECOVERY_CLAIMABLE_TO_USABLE
+      - RECOVERY_CLAIMABLE_TO_RETURNED
+      - BOUNDARY_SENDER_COST_GUARD
+      - RECONCILING_ANTI_DUPLICATE
 
   authority:
     consequential_product_build: AUTHORIZED_ON_FEATURE_BRANCH
-    deployment: AUTHORIZED_AFTER_DEPTH_CI_FOR_PUBLIC_JUDGE_EVIDENCE
+    deployment: AUTHORIZED_FOR_PUBLIC_JUDGE_EVIDENCE
     submission: HUMAN_PROTECTED
 
-  product_source:
-    living_prd: product/PRD.md
-    architecture: ARCHITECTURE.md
-    build_plan: BUILD-PLAN.md
-    lifecycle_coverage: PROJECT-LIFECYCLE-COVERAGE.yaml
-    depth_gap_review: audits/POST-VERTICAL-SLICE-DEPTH-GAP-REVIEW.md
+  exact_next_gate: PUBLIC_JUDGE_RUNTIME
 
-  exact_next_gate: NEGATIVE_BOUNDARY_RECONCILIATION_DEPTH
+  remaining_material_gaps:
+    - PUBLIC_RUNTIME
+    - DEPLOYMENT_COMMIT_BINDING
+    - CLEAN_HOSTED_RUN
+    - ACCESSIBILITY_AND_ENGINEERING_QUALITY
+    - JUDGE_STORY_DEMO_QA
+    - PROJECT_FINISHER
+    - SUBMISSION_INTEGRITY
 
-  depth_gaps:
-    - LIVE_SENDMAX_BOUNDARY
-    - LIVE_RECONCILING_ANTI_DUPLICATE
-    - PUBLIC_JUDGE_RUNTIME
-    - CLEAN_PUBLIC_HOST_RUN
-    - DEPLOYMENT_BINDING
-    - ENGINEERING_QUALITY_ASSURANCE
-    - TERMINAL_ASSURANCE
+  optional_scope:
+    c_address_sac_transfer: N_A
+    mainnet_micro_proof: N_A
+    csv_batch_upload: N_A
 
   truth_boundary:
     live_allowed:
@@ -72,6 +73,8 @@ canonical_project_state:
     induced_must_be_labeled:
       - SELF_SEEDED_LIQUIDITY
       - DELIBERATE_MISSING_TRUSTLINE
+      - CLIENT_RESPONSE_LOSS
+      - TIGHT_SENDMAX
     not_implemented:
       - FIAT_CASH_OUT
       - MONEYGRAM
@@ -84,4 +87,4 @@ canonical_project_state:
       - C_ADDRESS_SAC_TRANSFER
 
   build_candidate_ready: BLOCKED
-  block_reason: "Vertical slice is proven but material boundary/reconciliation depth, public runtime evidence, audit and terminal assurance remain incomplete."
+  block_reason: "Public judge runtime, hosted clean-run evidence, quality assurance and terminal/submission gates remain."
