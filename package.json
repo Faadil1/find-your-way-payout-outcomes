@@ -1,0 +1,12 @@
+{
+  "name": "payout-outcome-assurance-spike",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "spike": "node scripts/technical-spike.mjs"
+  },
+  "dependencies": {
+    "@stellar/stellar-sdk": "^17.2.1"
+  }
+}
