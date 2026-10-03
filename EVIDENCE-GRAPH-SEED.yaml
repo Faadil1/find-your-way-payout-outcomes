@@ -1,0 +1,42 @@
+version: 1
+project: FIND_YOUR_WAY_PAYOUT_OUTCOME_ASSURANCE
+repository: Faadil1/find-your-way-payout-outcomes
+claims:
+  - claim_id: C1_EXACT_OUTCOME
+    statement: "For a ready recipient, the system can deliver an exact destination amount through Stellar Strict Receive within a sender cost bound."
+    evidence_class: LIVE_TESTNET_REQUIRED
+    truth_state: NOT_PROVEN
+    scenarios: [S1_SUCCESS]
+  - claim_id: C2_SAFE_UNREADY_RECIPIENT
+    statement: "When a recipient cannot hold the target asset, the system can avoid blind retry and switch to a claimable balance that is later claimed or returned."
+    evidence_class: LIVE_TESTNET_REQUIRED
+    truth_state: NOT_PROVEN
+    scenarios: [S2_NEGATIVE_NO_TRUST, S3_RECOVERY_CLAIM, S4_RECOVERY_RETURN]
+scenarios:
+  - scenario_id: S1_SUCCESS
+    scenario_type: SUCCESS
+    preconditions: "Ready G-account with target-asset trustline and self-seeded testnet liquidity."
+    expected_consequence: "Exact destination amount received."
+  - scenario_id: S2_NEGATIVE_NO_TRUST
+    scenario_type: NEGATIVE
+    preconditions: "Destination G-account exists but lacks target-asset trustline."
+    expected_consequence: "Operation fails with no funds moved and op_no_trust evidence."
+  - scenario_id: S3_RECOVERY_CLAIM
+    scenario_type: RECOVERY
+    preconditions: "Claimable balance exists; recipient establishes trustline before deadline."
+    expected_consequence: "Recipient claims; outcome transitions CLAIMABLE → USABLE."
+  - scenario_id: S4_RECOVERY_RETURN
+    scenario_type: RECOVERY
+    preconditions: "Recipient does not claim before cutoff; treasury is claimant after cutoff."
+    expected_consequence: "Treasury reclaims; outcome transitions CLAIMABLE → RETURNED."
+runtime_execution:
+  status: MISSING
+receipt_or_telemetry:
+  expected: evidence/technical-spike-receipt.json
+commit:
+  status: PENDING_RUNTIME_BINDING
+  repository: Faadil1/find-your-way-payout-outcomes
+  branch: spike/technical-reality
+deployment:
+  status: NOT_APPLICABLE_WITH_REASON
+  reason: "Pre-build technical spike; no live product deployment claim."
