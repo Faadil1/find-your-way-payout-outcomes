@@ -51,6 +51,32 @@ test("live browser hero flow reaches usable and returned outcomes", async ({ pag
     { timeout: 60_000 },
   );
 
+  await page.getByRole("button", { name: /Prove sender-cost guard/i }).click();
+  await expect(page.getByTestId("safety-lab")).toHaveAttribute(
+    "data-boundary",
+    "PROVEN",
+    { timeout: 60_000 },
+  );
+  await expect(page.getByText(/op_over_sendmax/i).first()).toBeVisible();
+
+  await page.getByRole("button", { name: /Induce lost client response/i }).click();
+  await expect(page.getByTestId("safety-lab")).toHaveAttribute(
+    "data-reconciliation",
+    "RECONCILING",
+    { timeout: 60_000 },
+  );
+  await expect(page.getByRole("button", { name: /^Retry payment/i })).toBeDisabled();
+
+  await page.getByRole("button", { name: /Reconcile before retry/i }).click();
+  await expect(page.getByTestId("safety-lab")).toHaveAttribute(
+    "data-reconciliation",
+    "USABLE",
+    { timeout: 60_000 },
+  );
+  await expect(
+    page.getByText(/Original transfer reconciled without a second broadcast/i),
+  ).toBeVisible();
+
   const downloadPromise = page.waitForEvent("download");
   await page.getByRole("button", { name: /Export evidence receipt/i }).click();
   const download = await downloadPromise;
