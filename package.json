@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "test": "vitest run",
     "test:watch": "vitest",
-    "spike": "node scripts/technical-spike.mjs"
+    "spike": "node scripts/technical-spike.mjs",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "@stellar/stellar-sdk": "^17.2.1",
@@ -21,6 +22,7 @@
     "@vitejs/plugin-react": "^5.0.4",
     "typescript": "^5.9.3",
     "vite": "^7.1.7",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "@playwright/test": "^1.55.1"
   }
 }
