@@ -1,21 +1,33 @@
 version: 1
 project: FIND_YOUR_WAY_PAYOUT_OUTCOME_ASSURANCE
 repository: Faadil1/find-your-way-payout-outcomes
+
 claims:
   - claim_id: C1_EXACT_OUTCOME
-    statement: "For a ready recipient, the system can deliver an exact destination amount through Stellar Strict Receive within a sender cost bound."
-    evidence_class: LIVE_TESTNET
+    statement: "For a ready recipient, the product can deliver an exact destination amount through Stellar Strict Receive within a sender cost bound."
+    evidence_class: LIVE_TESTNET_BROWSER
     truth_state: PROVEN
     scenarios: [S1_SUCCESS]
   - claim_id: C2_SAFE_UNREADY_RECIPIENT
-    statement: "When a recipient cannot hold the target asset, the system can avoid blind retry and switch to a claimable balance that is later claimed or returned."
-    evidence_class: LIVE_TESTNET
+    statement: "When a recipient cannot hold the target asset, the product can avoid blind retry and switch to a claimable balance that is later claimed or returned."
+    evidence_class: LIVE_TESTNET_BROWSER
     truth_state: PROVEN
     scenarios: [S2_NEGATIVE_NO_TRUST, S3_RECOVERY_CLAIM, S4_RECOVERY_RETURN]
+  - claim_id: C3_EXACT_OUTCOME_COST_GUARD
+    statement: "When the exact destination amount cannot fit inside the sender cost bound, the product fails closed and does not silently degrade the recipient outcome."
+    evidence_class: LIVE_TESTNET_BROWSER
+    truth_state: PROVEN
+    scenarios: [S5_BOUNDARY_SENDMAX]
+  - claim_id: C4_RECONCILE_BEFORE_RETRY
+    statement: "When the client loses the submission response, the product enters RECONCILING, blocks duplicate execution, and resolves the original transaction from ledger evidence."
+    evidence_class: LIVE_TESTNET_BROWSER
+    truth_state: PROVEN
+    scenarios: [S6_RECOVERY_RECONCILIATION]
+
 scenarios:
   - scenario_id: S1_SUCCESS
     scenario_type: SUCCESS
-    preconditions: "Ready G-account with target-asset trustline and self-seeded testnet liquidity."
+    preconditions: "Ready G-account with target-asset trustline and self-seeded Testnet liquidity."
     expected_consequence: "Exact destination amount received."
   - scenario_id: S2_NEGATIVE_NO_TRUST
     scenario_type: NEGATIVE
@@ -27,34 +39,65 @@ scenarios:
     expected_consequence: "Recipient claims; outcome transitions CLAIMABLE → USABLE."
   - scenario_id: S4_RECOVERY_RETURN
     scenario_type: RECOVERY
-    preconditions: "Recipient does not claim before cutoff; treasury is claimant after cutoff."
+    preconditions: "Recipient does not claim before cutoff; treasury becomes claimant after cutoff."
     expected_consequence: "Treasury reclaims; outcome transitions CLAIMABLE → RETURNED."
-runtime_execution:
-  status: OBSERVED
-  runtime: GITHUB_ACTIONS_STELLAR_TESTNET
-  run_id: 37086143496
-  observed_at: "2026-10-03T01:27:22.728Z/2026-10-03T01:29:47.337Z"
-  result: PROVEN_WITH_SAC_DEFERRED
-dependency:
+  - scenario_id: S5_BOUNDARY_SENDMAX
+    scenario_type: BOUNDARY
+    preconditions: "Exact destination amount requires more source value than sendMax permits."
+    expected_consequence: "Stellar returns sender-cap rejection; no settlement; product reports FAILED_NO_FUNDS_MOVED."
+  - scenario_id: S6_RECOVERY_RECONCILIATION
+    scenario_type: RECOVERY
+    preconditions: "A real payment is submitted but its client success response is intentionally discarded."
+    expected_consequence: "Product enters RECONCILING, blocks retry, queries ledger by original hash, confirms one settlement, then resolves outcome."
+
+runtime_executions:
+  - execution_id: TECHNICAL_SPIKE
+    runtime: GITHUB_ACTIONS_STELLAR_TESTNET
+    run_id: 37086143496
+    result: PROVEN_WITH_SAC_DEFERRED
+  - execution_id: UI_VERTICAL_SLICE
+    runtime: PLAYWRIGHT_CHROMIUM_PLUS_STELLAR_TESTNET
+    run_id: 37088125083
+    result: VERTICAL_SLICE_PROVEN
+  - execution_id: DEPTH_BOUNDARY_RECONCILIATION
+    runtime: PLAYWRIGHT_CHROMIUM_PLUS_STELLAR_TESTNET
+    run_id: 37089058200
+    result: NEGATIVE_BOUNDARY_RECONCILIATION_DEPTH_PROVEN
+
+dependencies:
   - dependency_id: STELLAR_TESTNET
     role: "Live ledger execution and result codes"
     live_or_stub: LIVE_TESTNET
     load_bearing: true
   - dependency_id: SELF_SEEDED_ORDERBOOK
-    role: "Deterministic Strict Receive test liquidity"
+    role: "Deterministic exact-outcome route and boundary testing"
     live_or_stub: LIVE_TESTNET_INDUCED
     load_bearing: true
-receipt_or_telemetry:
-  status: OBSERVED
-  artifact_pointer: "GitHub Actions run 37086143496 / artifact 11260662802"
-  artifact_digest: "sha256:81a423100f1a33c9fb9c8020412f584108c4ab60c0343bbe3de8309e789fd6df"
-  canonical_summary: evidence/TECHNICAL-REALITY-RECEIPT.md
-  observed_or_generated: GENERATED_FROM_LIVE_RUNTIME
+  - dependency_id: HORIZON
+    role: "Account capability preflight and transaction reconciliation"
+    live_or_stub: LIVE_TESTNET
+    load_bearing: true
+
+receipts:
+  - receipt_id: TECHNICAL_SPIKE_RECEIPT
+    artifact_pointer: "GitHub Actions run 37086143496 / artifact 11260662802"
+    artifact_digest: "sha256:81a423100f1a33c9fb9c8020412f584108c4ab60c0343bbe3de8309e789fd6df"
+    canonical_summary: evidence/TECHNICAL-REALITY-RECEIPT.md
+  - receipt_id: UI_VERTICAL_SLICE_RECEIPT
+    artifact_pointer: "GitHub Actions run 37088125083 / artifact 11260798986"
+    artifact_digest: "sha256:86b055c1fa64f3d03d54808e6602539347497e70bf221e2061ca586d976df1aa"
+    canonical_summary: evidence/LIVE-UI-CORE-LOOP-RECEIPT.md
+  - receipt_id: DEPTH_RECEIPT
+    artifact_pointer: "GitHub Actions run 37089058200 / artifact 11262205391"
+    artifact_digest: "sha256:11a1dfeede6f55a139a53304cd5e157cf66f6400c63edea28331eb5f7df14ef4"
+    canonical_summary: evidence/BOUNDARY-RECONCILIATION-DEPTH-RECEIPT.md
+
 commit:
-  status: BOUND
+  status: BOUND_FOR_DEPTH_RUN
   repository: Faadil1/find-your-way-payout-outcomes
-  commit_sha: 44ec3e5c264867dabcba7fa437c87484c23c4778
-  branch: spike/technical-reality
+  commit_sha: f4f83969f96eb114242ab482c32d5ddc4a175119
+  branch: build/core-outcome-loop
+
 deployment:
-  status: NOT_APPLICABLE_WITH_REASON
-  reason: "Pre-build technical spike; no live product deployment claim."
+  status: MISSING
+  reason: "Public judge runtime is the next gate; no deployment claim yet."
