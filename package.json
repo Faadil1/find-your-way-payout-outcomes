@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "test": "vitest run",
+    "test": "vitest run src",
     "test:watch": "vitest",
     "spike": "node scripts/technical-spike.mjs",
     "e2e": "playwright test"
