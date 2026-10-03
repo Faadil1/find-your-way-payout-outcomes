@@ -376,3 +376,59 @@ export async function reclaim(
     StellarSdk.Operation.claimClaimableBalance({ balanceId }),
   ]);
 }
+
+
+export async function executeDirectPaymentWithLostResponse(
+  source: StellarSdk.Keypair,
+  destination: string,
+  asset: StellarSdk.Asset,
+  amount = "1",
+) {
+  const sourceAccount = await loadAccount(source.publicKey());
+  const tx = new StellarSdk.TransactionBuilder(sourceAccount, {
+    fee: StellarSdk.BASE_FEE,
+    networkPassphrase: NETWORK,
+  })
+    .addOperation(
+      StellarSdk.Operation.payment({
+        destination,
+        asset,
+        amount,
+      }),
+    )
+    .setTimeout(180)
+    .build();
+
+  const txHash = Array.from(tx.hash())
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+  tx.sign(source);
+
+  // The network submission is real. The returned success payload is intentionally
+  // discarded to create a deterministic client-response-loss scenario.
+  await server.submitTransaction(tx);
+  return { txHash, responseIntentionallyDiscarded: true as const };
+}
+
+export async function reconcileTransaction(txHash: string) {
+  try {
+    const transaction = await server.transactions().transaction(txHash).call();
+    return {
+      found: true as const,
+      successful: transaction.successful,
+      ledger: transaction.ledger,
+      hash: transaction.hash,
+    };
+  } catch (error) {
+    const maybe = error as { response?: { status?: number }; message?: string };
+    if (maybe.response?.status === 404) {
+      return {
+        found: false as const,
+        successful: false,
+        ledger: null,
+        hash: txHash,
+      };
+    }
+    throw error;
+  }
+}
